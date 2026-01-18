@@ -1,0 +1,83 @@
+<%- include('../partials/header') %>
+<!--If the user is logged in and presses the avatar on header, this is the window that shows-->
+<!--all logged in users are regarded as writers despite having no books-->
+<main class="container mx-auto px-6 py-10">
+    <section class="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm mb-10 flex flex-col md:flex-row items-center gap-8">
+        <div class="w-24 h-24 bg-emerald-100 rounded-full border-4 border-white shadow-lg overflow-hidden">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=<%= currentUser %>" alt="avatar">
+        </div>
+        <div class="text-center md:text-left">
+            <h1 class="text-3xl font-black text-slate-900">Welcome, <%= user.username %>!</h1>
+            <p class="text-slate-500 font-medium">Author since <%= new Date(user.createdAt).toLocaleDateString() %></p>
+            <div class="flex gap-4 mt-4 justify-center md:justify-start">
+                <div class="bg-emerald-50 px-5 py-2 rounded-xl border border-emerald-100">
+                    <span class="block text-emerald-700 font-black text-2xl leading-none"><%= books.length %></span>
+                    <span class="text-[10px] text-emerald-600 uppercase font-bold tracking-widest">Published Books</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-black text-slate-900 tracking-tight">My Writing Studio</h2>
+        <a href="/write" class="bg-emerald-50 text-emerald-700 px-4 py-2 rounded-lg font-bold hover:bg-emerald-600 hover:text-white transition-all duration-200">
+            + New Story
+        </a>
+    </div>
+    <!--If the user has books published, these will read info on what genre they are, then change the color schemes-->
+    <div class="grid grid-cols-1 gap-4">
+        <% if (books.length > 0) { %>
+            <% books.forEach(book => { %>
+                <% 
+                    // Genre-specific Accent Colors
+                    let accentColor = 'border-l-slate-400';
+                    let badgeBg = 'bg-slate-100 text-slate-600';
+
+                    switch(book.genre) {
+                        case 'Fantasy': accentColor = 'border-l-emerald-500'; badgeBg = 'bg-emerald-50 text-emerald-700'; break;
+                        case 'Sci-Fi': accentColor = 'border-l-blue-500'; badgeBg = 'bg-blue-50 text-blue-700'; break;
+                        case 'Romance': accentColor = 'border-l-rose-500'; badgeBg = 'bg-rose-50 text-rose-700'; break;
+                        case 'Mystery': accentColor = 'border-l-amber-500'; badgeBg = 'bg-amber-50 text-amber-700'; break;
+                        case 'Thriller': accentColor = 'border-l-purple-500'; badgeBg = 'bg-purple-50 text-purple-700'; break;
+                        default: accentColor = 'border-l-emerald-500'; badgeBg = 'bg-emerald-50 text-emerald-700';
+                    }
+                %>
+                
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 border-l-8 <%= accentColor %> flex flex-col md:flex-row items-center justify-between hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 gap-4">
+                    <div class="flex items-center gap-5 w-full md:w-auto">
+                        <img src="<%= book.coverImage || 'https://via.placeholder.com/150' %>" class="w-14 h-20 object-cover rounded-lg shadow-sm border border-slate-100">
+                        <div>
+                            <h3 class="font-black text-slate-900 text-lg leading-tight"><%= book.title %></h3>
+                            <span class="<%= badgeBg %> text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded mt-1 inline-block">
+                                <%= book.genre %>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-3 w-full md:w-auto justify-end">
+                        <a href="/book/<%= book._id %>" class="flex-grow md:flex-none text-center px-5 py-2.5 bg-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-200 transition-colors">
+                            Manage
+                        </a>
+                        <a href="/book/<%= book._id %>/add-chapter" class="flex-grow md:flex-none text-center px-5 py-2.5 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700 transition-shadow shadow-md shadow-emerald-100">
+                            Add Chapter
+                        </a>
+                    </div>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <div class="text-center py-24 bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
+                <div class="text-slate-300 mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                </div>
+                <p class="text-slate-500 font-medium text-lg">Your library is currently a blank page.</p>
+                <a href="/write" class="text-emerald-600 font-bold hover:text-emerald-700 mt-2 inline-block text-lg">
+                    Start your first masterpiece →
+                </a>
+            </div>
+        <% } %>
+    </div>
+</main>
+
+<%- include('../partials/footer') %>

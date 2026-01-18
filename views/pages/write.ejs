@@ -1,0 +1,49 @@
+<%- include('../partials/header') %>
+<!--this page is for creating an entirely new book without chapters just yet-->
+<main class="container mx-auto px-6 py-10 max-w-3xl">
+    <header class="mb-8">
+        <h1 class="text-3xl font-bold text-slate-900">Create a New Story</h1>
+        <p class="text-slate-500">Your new masterpiece awaits you.</p>
+    </header>
+
+    <form action="/create-book" method="POST" class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200">
+    
+        <div class="mb-6">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">Book Title</label>
+            <input type="text" name="title" required 
+                   class="w-full px-4 py-3 rounded-lg border border-slate-300 outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">Genre</label>
+            <select name="genre" 
+                    class="w-full px-4 py-3 rounded-lg border border-slate-300 outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
+                <option value="Fantasy">Fantasy</option>
+                <option value="Sci-Fi">Sci-Fi</option>
+                <option value="Mystery">Mystery</option>
+                <option value="Romance">Romance</option>
+                <option value="Drama">Drama</option>
+                <option value="Thriller">Thriller</option>
+            </select>
+        </div>
+
+        <div class="mb-6">
+            <!--The MongoDB is fully focused on text and URLs, not actual image files-->
+            <label class="block text-sm font-semibold text-slate-700 mb-2">Cover Image URL</label>
+            <input type="text" name="image" placeholder="https://images.unsplash.com/..." 
+                   class="w-full px-4 py-3 rounded-lg border border-slate-300 outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all">
+        </div>
+
+        <div class="mb-8">
+            <label class="block text-sm font-semibold text-slate-700 mb-2">Description</label>
+            <textarea name="description" rows="4" 
+                      class="w-full px-4 py-3 rounded-lg border border-slate-300 outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"></textarea>
+        </div>
+
+        <button type="submit" class="w-full bg-emerald-600 text-white font-bold py-4 rounded-xl hover:bg-emerald-700 transition shadow-lg shadow-emerald-100">
+            Publish Story
+        </button>
+    </form>
+</main>
+
+<%- include('../partials/footer') %>

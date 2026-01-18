@@ -1,0 +1,50 @@
+<%- include('../partials/header') %>
+<!--This displays the data inside chapters, taken from MongoDB-->
+<main class="container mx-auto px-6 py-12 max-w-2xl">
+    <div class="text-center mb-12">
+        <p class="text-emerald-600 font-bold uppercase tracking-widest text-xs">Reading: <%= book.title %></p>
+        <h1 class="text-4xl font-bold text-slate-900 mt-2 italic"><%= chapter.title %></h1>
+    </div>
+    <!--I used article instead of section because chapter content can be regarded by itself-->
+    <article class="prose prose-lg prose-emerald mx-auto text-slate-700 leading-loose">
+        <p class="whitespace-pre-line"><%= chapter.content %></p> 
+    </article>
+
+    <div class="mt-16 pt-8 border-t border-slate-200">
+        <div class="flex items-center justify-between gap-4">
+            <!--These are if statements depending on what chapter the user is reading-->
+            <!--for example, if they're reading the first chapter, they will be shown the else statement-->
+            <!--if they're reading the final chapter, it'll show that you're at the end-->
+            <% if (prevChapter) { %>
+                <a href="/read/<%= prevChapter._id %>" class="flex-1 text-left p-4 rounded-xl border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50 transition-all group">
+                    <span class="block text-xs text-slate-400 font-bold uppercase tracking-widest">Previous</span>
+                    <span class="block text-slate-900 font-bold group-hover:text-emerald-700">← <%= prevChapter.title %></span>
+                </a>
+            <% } else { %>
+                <a href="/book/<%= book._id %>" class="flex-1 text-left p-4 text-slate-400 hover:text-emerald-600 transition-colors font-medium">
+                    ← Back to Table of Contents
+                </a>
+            <% } %>
+
+            <% if (nextChapter) { %>
+                <a href="/read/<%= nextChapter._id %>" class="flex-1 text-right p-4 rounded-xl border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50 transition-all group">
+                    <span class="block text-xs text-slate-400 font-bold uppercase tracking-widest">Next</span>
+                    <span class="block text-slate-900 font-bold group-hover:text-emerald-700"><%= nextChapter.title %> →</span>
+                </a>
+            <% } else { %>
+                 <div class="flex-1 text-right p-4">
+                    <span class="text-slate-300 font-bold italic">End of current chapters</span>
+                 </div>
+            <% } %>
+
+        </div>
+
+        <div class="text-center mt-8">
+            <a href="/book/<%= book._id %>" class="text-sm font-bold text-emerald-600 hover:underline">
+                View All Chapters
+            </a>
+        </div>
+    </div>
+</main>
+
+<%- include('../partials/footer') %>

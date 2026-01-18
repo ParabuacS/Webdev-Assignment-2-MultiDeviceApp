@@ -1,0 +1,71 @@
+<%- include('../partials/header') %>
+<!--This shows main book information, not the insides of the chapters themselves-->
+<main class="container mx-auto px-6 py-10">
+    <!--Please note that I used quite a few if statements via the built-in javascript-->
+    <!--scenario one is you're logged into an account as a reader-->
+    <!--scenario two is you're logged into an account as the book's author-->
+    <!--scenario three is you're not logged in at all-->
+    <div class="flex flex-col md:flex-row gap-10">
+        <div class="w-full md:w-1/3">
+            <img src="<%= book.coverImage || 'https://via.placeholder.com/500x750' %>" 
+                 class="w-full rounded-2xl shadow-2xl border border-slate-200">
+        </div>
+        <div class="w-full md:w-2/3">
+            <!--main book information, not the chapter list just yet-->
+            <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-sm font-bold uppercase tracking-wider">
+                <%= book.genre %>
+            </span>
+            <h1 class="text-5xl font-black text-slate-900 mt-4"><%= book.title %></h1>
+            <p class="text-xl text-slate-500 mt-2 italic">by <%= book.author %></p>
+            <div class="mt-8 prose prose-slate">
+                <h3 class="text-lg font-bold text-slate-800">About this story</h3>
+                <p class="text-slate-600 leading-relaxed">
+                    <%= book.description %>
+                </p>
+            </div>
+            <div class="mt-10">
+                <!--This area is where the if statements will come from-->
+                <!--Apart from the scenarios earlier, it'll also show if there's a chapter, or no chapters-->
+                <h3 class="text-2xl font-bold mb-4 border-b pb-2 text-slate-900">Chapters</h3>
+                <div class="space-y-3">
+                    <% if (chapters && chapters.length > 0) { %>
+                        <% chapters.forEach(chap => { %>
+                            <div class="flex items-center gap-2 group">
+                                <a href="/read/<%= chap._id %>" class="flex-grow p-4 bg-white border border-slate-200 rounded-xl hover:border-emerald-500 hover:shadow-md transition-all duration-200">
+                                    <span class="font-bold text-emerald-600 mr-2">Chapter <%= chap.chapterNumber %>:</span> <%= chap.title %>
+                                </a>
+                                
+                                <% if (currentUser && book.authorId && currentUser.toString() === book.authorId.toString()) { %>
+                                    <a href="/chapter/<%= chap._id %>/edit" 
+                                       class="p-4 bg-slate-100 text-slate-500 rounded-xl hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
+                                       title="Edit Chapter">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                                        </svg>
+                                    </a>
+                                <% } %>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <p class="text-slate-400 italic">No chapters published yet.</p>
+                    <% } %>
+                </div>
+                <% if (currentUser && book.authorId && currentUser.toString() === book.authorId.toString()) { %>
+                    <div class="mt-12 pt-8 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
+                        <a href="/book/<%= book._id %>/add-chapter" 
+                           class="bg-emerald-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-emerald-700 transition shadow-lg shadow-emerald-100">
+                            + Add New Chapter
+                        </a>
+                        <!--If you're the author and you press delete book, this displays a warning message-->
+                        <a href="/book/<%= book._id %>/delete" 
+                           onclick="return confirm('Are you sure? This will permanently delete this book and every chapter inside it.')"
+                           class="text-sm font-bold text-slate-400 hover:text-rose-600 transition-colors uppercase tracking-widest">
+                            Delete Book
+                        </a>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</main>
+<%- include('../partials/footer') %>
